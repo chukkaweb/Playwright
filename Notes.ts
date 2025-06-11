@@ -120,142 +120,6 @@ test('homepage has title', async ({ page }) => {
 Let’s add a clear explanation for `async`, `await`, and how they work in Playwright (and JavaScript in general), along with simple code execution flow.
 
 
-
-### 🔄 Understanding `async`, `await`, and Function Execution
-
-✅ What is `async`?
-
-Marks a function to always return a **Promise**.
-Inside an `async` function, you can use `await`.
-
-
-async function myFunction() {
-  return 'Hello';
-}
-
-// This returns a Promise
-myFunction().then(console.log); // Output: Hello
-
-
-
-
-✅ What is `await`?
-
-`await` is used **inside an async function*to pause execution until a Promise resolves.
-
-
-async function showData() {
-  const result = await fetch('https://api.example.com');
-  console.log(result);
-}
-
-
-This pauses at `await` until the `fetch` completes.
-
-
-
-🧠 Execution Flow
-
-
-console.log('Start');
-
-async function test() {
-  console.log('Inside async function');
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  console.log('After await');
-}
-
-test();
-console.log('End');
-
-
-**Output:**
-
-
-Start
-Inside async function
-End
-After await
-
-
-👉 Explanation:
-
-`await` pauses only **inside*the async function.
-Main thread continues to next line (`End`).
-After 1 second, it resumes and prints `After await`.
-
-
-
-### 📘 Why is this important in Playwright?
-
-Playwright is **asynchronous**, because most operations (like page actions) return Promises.
-
-✅ Example:
-
-
-test('Login Test', async ({ page }) => {
-  await page.goto('https://example.com');
-  await page.fill('#username', 'ganesh');
-  await page.fill('#password', 'secret123');
-  await page.click('button[type=submit]');
-  await expect(page).toHaveURL(/dashboard/);
-});
-
-
-Each `await` ensures:
-
-Page loads before filling
-Field fills before button click
-Navigation happens before assertion
-
-Without `await`, test becomes unreliable.
-Would you like me to add this to your **Playwright Topics Checklist*document now?
-
-
-🧪 Playwright Test Features
-
-`test()` – Defines a test block.
-`expect()` – Assertion API.
-`beforeAll`, `beforeEach`, `afterEach`, `afterAll` – Hooks.
-Fixtures – To share setup (like browser, context, login).
-
-🔍 Locators
-page.locator('text=Login')
-page.locator('id')
-page.locator('.class')
-
-Smart and stable element selectors.
-⚙️ Config File (`playwright.config.ts`)
-const config: PlaywrightTestConfig = {
-  timeout: 30000,
-  use: {
-    headless: true,
-    baseURL: 'https://example.com',
-    screenshot: 'only-on-failure',
-  },
-};
-export default config;
-
-📁 CLI Commands (One-Line)
-
-| Command                        | Explanation                           |
-|  | - |
-| `npx playwright test`          | Run all tests                         |
-| `npx playwright test --debug`  | Debug mode                            |
-| `npx playwright show-report`   | Open test report                      |
-| `npx playwright test --ui`     | Launch test UI                        |
-| `npx playwright install`       | Install browsers                      |
-| `npx playwright codegen <url>` | Record actions and generate test code |
-
-🧰 Useful Features
-
-✅ Screenshots & videos
-✅ Trace Viewer
-✅ Parallel tests
-✅ Custom reporters
-✅ Page object model support
-
-
 🛠 Playwright – Local Setup & Environment Notes
 
 ✅ 1. Prerequisites
@@ -265,19 +129,14 @@ Recommended: Use VS Code and TypeScript
 
 ✅ 2. Project Setup (First Time)
 
-
 npm init playwright@latest
-
 
 Initializes a Playwright project.
 Creates folders like `tests/` and `playwright.config.ts`
 Installs browsers (Chromium, Firefox, WebKit)
 
 
-
 ✅ 3. Folder Structure
-
-
 my-project/
 ├── tests/                  Test files (e.g., .spec.ts)
 ├── playwright.config.ts    Configuration file
@@ -346,6 +205,287 @@ Let me know if you'd like to add:
 Here are simple and clear notes on XPath in Playwright, with examples—perfect for learning or interview prep.
 Here’s a simple and clean "First Test Case Example" in Playwright with TypeScript — great for beginners:
 
+
+### 📘 Why is this important in Playwright?
+Playwright is **asynchronous**, because most operations (like page actions) return Promises.
+
+✅ Example:
+test('Login Test', async ({ page }) => {
+  await page.goto('https://example.com');
+  await page.fill('#username', 'ganesh');
+  await page.fill('#password', 'secret123');
+  await page.click('button[type=submit]');
+  await expect(page).toHaveURL(/dashboard/);
+});
+
+
+🎯 Playwright Actions & Interactions
+
+These are methods used to interact with web elements, like clicking, typing, hovering, etc.
+
+✅ Common Actions
+
+| Action       | Syntax Example                                 | What it Does                         |
+| - | -- | - |
+| `click()`        | `await page.click('text=Login');`                  | Clicks on a button, link, or element     |
+| `fill()`         | `await page.fill('email', 'ganesh@test.com');`    | Fills input field with text              |
+| `type()`         | `await page.type('email', 'ganesh');`             | Types character-by-character (slower)    |
+| `press()`        | `await page.press('input', 'Enter');`             | Simulates keyboard press like Enter, Tab |
+| `dblclick()`     | `await page.dblclick('item');`                    | Double-clicks the element                |
+| `hover()`        | `await page.hover('.menu');`                       | Moves mouse over element                 |
+| `check()`        | `await page.check('agree');`                      | Checks a checkbox                        |
+| `uncheck()`      | `await page.uncheck('agree');`                    | Unchecks a checkbox                      |
+| `selectOption()` | `await page.selectOption('selectcountry', 'IN');` | Selects dropdown value                   |
+| `dragTo()`       | `await source.dragTo(target);`                     | Drags one element to another             |
+| `screenshot()`   | `await page.screenshot({ path: 'page.png' });`     | Takes a screenshot                       |
+
+
+
+🧪 Full Example
+test('user login test', async ({ page }) => {
+  await page.goto('https://example.com/login');
+
+  await page.fill('username', 'ganesh');
+  await page.fill('password', 'password123');
+  await page.click('button[type="submit"]');
+
+  await expect(page).toHaveURL(/dashboard/);
+});
+
+
+💡 Tips:
+
+All actions auto-wait: No need to manually add delays or waits.
+Always combine actions with assertions to validate outcomes.
+Use `locator().click()` instead of `page.click()` for more stable selectors.
+
+
+
+✅ Playwright Assertions – Quick Notes
+
+📌 What is an Assertion?
+
+An assertion is used to check that something is true during a test.
+If the assertion fails, the test will fail.
+
+Playwright uses `expect()` from its test library for making assertions.
+  
+🧪 Importing Assertion
+import { test, expect } from '@playwright/test';
+🧰 Common Assertions in Playwright
+
+| Assertion       | Usage Example                                    | Checks                        |
+| - | - |  |
+| `toBeVisible()`     | `expect(locator).toBeVisible();`                     | Element is visible on page        |
+| `toBeHidden()`      | `expect(locator).toBeHidden();`                      | Element is not visible            |
+| `toHaveText()`      | `expect(locator).toHaveText('Success');`             | Element contains exact text       |
+| `toContainText()`   | `expect(locator).toContainText('Welcome');`          | Text contains substring           |
+| `toHaveValue()`     | `expect(locator).toHaveValue('Ganesh');`             | Input field has value             |
+| `toHaveAttribute()` | `expect(locator).toHaveAttribute('type', 'submit');` | Attribute check                   |
+| `toHaveCount()`     | `expect(locator).toHaveCount(3);`                    | Number of matching elements       |
+| `toBeChecked()`     | `expect(locator).toBeChecked();`                     | Checkbox/radio is selected        |
+| `toBeDisabled()`    | `expect(locator).toBeDisabled();`                    | Element is disabled               |
+| `toBeEditable()`    | `expect(locator).toBeEditable();`                    | Input is editable                 |
+| `toHaveClass()`     | `expect(locator).toHaveClass(/active/);`             | Class name check (supports RegEx) |
+
+
+
+✅ Example Full Test
+test('Login form test', async ({ page }) => {
+  await page.goto('https://example.com/login');
+
+  const username = page.locator('username');
+  const submitBtn = page.locator('button[type="submit"]');
+
+  await expect(username).toBeVisible();
+  await username.fill('Ganesh');
+
+  await expect(submitBtn).toBeEnabled();
+  await submitBtn.click();
+
+  await expect(page.locator('.success-msg')).toHaveText('Login successful');
+});
+
+
+💡 Tips:
+
+Assertions automatically wait for timeout (default: 5s).
+Use `expect()` only after page actions to verify results.
+
+Let me know if you want:
+
+✅ List of advanced assertions
+✅ How to add custom assertions
+✅ Tips for flaky test handling with retries
+
+Here's a clear and simple comparison between Soft Assertions and Hard Assertions in Playwright (and testing in general), with examples:
+
+✅ Hard Assertion vs Soft Assertion in Playwright
+
+| Aspect                | Hard Assertion                         | Soft Assertion                                    |
+| - |  | -- |
+| Definition            | Stops the test immediately on failure      | Continues execution even if the assertion fails       |
+| Behavior              | Test fails and exits on first failed check | Test runs all assertions, collects all failures       |
+| Use Case              | Critical checks (e.g., login success)      | Optional or multiple validations in a test            |
+| Support in Playwright | ✅ Fully supported using `expect()`         | ❌ Not natively supported (needs workaround or plugin) |
+
+
+
+🔴 Hard Assertion Example (Default in Playwright)
+import { test, expect } from '@playwright/test';
+
+test('hard assertion example', async ({ page }) => {
+  await page.goto('https://example.com');
+
+  await expect(page.locator('username')).toBeVisible(); // If this fails, test stops here
+  await expect(page.locator('password')).toBeVisible();
+});
+If the first `expect` fails, the second line won’t be executed.
+
+
+
+🟡 Soft Assertion Example (Workaround)
+
+Playwright doesn't support native soft assertions, but you can manually collect errors like this:
+test('soft assertion example', async ({ page }) => {
+  const errors: string[] = [];
+
+  await page.goto('https://example.com');
+
+  try {
+    await expect(page.locator('username')).toBeVisible();
+  } catch (e) {
+    errors.push('Username field not visible');
+  }
+
+  try {
+    await expect(page.locator('password')).toBeVisible();
+  } catch (e) {
+    errors.push('Password field not visible');
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors.join('\n')); // Fails at end with all errors
+  }
+});
+
+
+✅ Summary
+
+Use hard assertions for essential test flow control.
+Use soft assertion (workaround) when you want to validate multiple things but fail only at the end.
+
+Let me know if you want:
+
+✅ A reusable soft assertion helper function
+✅ Integration with third-party assertion libraries (like `chai-soft-assert`)
+
+
+
+### 🔄 Understanding `async`, `await`, and Function Execution
+
+✅ What is `async`?
+
+Marks a function to always return a **Promise**.
+Inside an `async` function, you can use `await`.
+
+async function myFunction() {
+  return 'Hello';
+}
+
+// This returns a Promise
+myFunction().then(console.log); // Output: Hello
+
+
+✅ What is `await`?
+
+`await` is used **inside an async function*to pause execution until a Promise resolves.
+
+
+async function showData() {
+  const result = await fetch('https://api.example.com');
+  console.log(result);
+}
+
+
+This pauses at `await` until the `fetch` completes.
+
+🧠 Execution Flow
+console.log('Start');
+
+async function test() {
+  console.log('Inside async function');
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  console.log('After await');
+}
+
+test();
+console.log('End');
+
+
+**Output:**
+Start
+Inside async function
+End
+After await
+👉 Explanation:
+
+`await` pauses only **inside*the async function.
+Main thread continues to next line (`End`).
+After 1 second, it resumes and prints `After await`.
+
+
+Each `await` ensures:
+Page loads before filling
+Field fills before button click
+Navigation happens before assertion
+
+Without `await`, test becomes unreliable.
+Would you like me to add this to your **Playwright Topics Checklist*document now?
+
+🧪 Playwright Test Features
+
+`test()` – Defines a test block.
+`expect()` – Assertion API.
+`beforeAll`, `beforeEach`, `afterEach`, `afterAll` – Hooks.
+Fixtures – To share setup (like browser, context, login).
+
+🔍 Locators
+page.locator('text=Login')
+page.locator('id')
+page.locator('.class')
+
+Smart and stable element selectors.
+⚙️ Config File (`playwright.config.ts`)
+const config: PlaywrightTestConfig = {
+  timeout: 30000,
+  use: {
+    headless: true,
+    baseURL: 'https://example.com',
+    screenshot: 'only-on-failure',
+  },
+};
+export default config;
+
+📁 CLI Commands (One-Line)
+
+| Command                        | Explanation                           |
+|  | - |
+| `npx playwright test`          | Run all tests                         |
+| `npx playwright test --debug`  | Debug mode                            |
+| `npx playwright show-report`   | Open test report                      |
+| `npx playwright test --ui`     | Launch test UI                        |
+| `npx playwright install`       | Install browsers                      |
+| `npx playwright codegen <url>` | Record actions and generate test code |
+
+🧰 Useful Features
+
+✅ Screenshots & videos
+✅ Trace Viewer
+✅ Parallel tests
+✅ Custom reporters
+✅ Page object model support
+
 🚀 Core Concepts in Playwright
 
 |   | Concept              | Explanation                                                                  | Example                                    |
@@ -364,8 +504,6 @@ Here’s a simple and clean "First Test Case Example" in Playwright with TypeScr
 | 12 | Codegen              | Auto-generates code by recording your browser actions.                           | `npx playwright codegen <url>`                 |
 | 13 | Storage State        | Used for saving login session and reusing it in tests.                       | `context.storageState({ path: 'state.json' })` |
 | 14 | Configuration        | File to manage global settings like browser, baseURL, timeout.                   | `playwright.config.ts`                         |
-
-
 
 🧪 Example Flow:
 // 1. Launch browser
@@ -393,6 +531,7 @@ Let me know if you'd like:
 🔐 Login session reuse example
 📄 `playwright.config.ts` explained in detail
 
+Add // @ts-check at the start of each test file when using JavaScript in VS Code to get automatic type checking.
 
 ✅ Your First Playwright Test (TypeScript)
 
@@ -401,9 +540,6 @@ my-playwright-project/
 ├── tests/
 │   └── first-test.spec.ts
 ├── playwright.config.ts
-
-
-
 
 🧪 Test File: `first-test.spec.ts`
 import { test, expect } from '@playwright/test';
@@ -420,7 +556,6 @@ test('homepage should have title and login button', async ({ page }) => {
   // Optional: Assert the new page URL or content
   await expect(page).toHaveURL(/iana\.org/);
 });
-
 
 ▶️ How to Run the Test
 npx playwright test
@@ -840,168 +975,7 @@ Let me know if you want:
 
 Here are simple and clear notes on Assertions in Playwright — with examples and explanations, ideal for learning and interviews. ✅
 
-
-
-✅ Playwright Assertions – Quick Notes
-
-📌 What is an Assertion?
-
-An assertion is used to check that something is true during a test.
-If the assertion fails, the test will fail.
-
-Playwright uses `expect()` from its test library for making assertions.
-  
-🧪 Importing Assertion
-import { test, expect } from '@playwright/test';
-🧰 Common Assertions in Playwright
-
-| Assertion       | Usage Example                                    | Checks                        |
-| - | - |  |
-| `toBeVisible()`     | `expect(locator).toBeVisible();`                     | Element is visible on page        |
-| `toBeHidden()`      | `expect(locator).toBeHidden();`                      | Element is not visible            |
-| `toHaveText()`      | `expect(locator).toHaveText('Success');`             | Element contains exact text       |
-| `toContainText()`   | `expect(locator).toContainText('Welcome');`          | Text contains substring           |
-| `toHaveValue()`     | `expect(locator).toHaveValue('Ganesh');`             | Input field has value             |
-| `toHaveAttribute()` | `expect(locator).toHaveAttribute('type', 'submit');` | Attribute check                   |
-| `toHaveCount()`     | `expect(locator).toHaveCount(3);`                    | Number of matching elements       |
-| `toBeChecked()`     | `expect(locator).toBeChecked();`                     | Checkbox/radio is selected        |
-| `toBeDisabled()`    | `expect(locator).toBeDisabled();`                    | Element is disabled               |
-| `toBeEditable()`    | `expect(locator).toBeEditable();`                    | Input is editable                 |
-| `toHaveClass()`     | `expect(locator).toHaveClass(/active/);`             | Class name check (supports RegEx) |
-
-
-
-✅ Example Full Test
-test('Login form test', async ({ page }) => {
-  await page.goto('https://example.com/login');
-
-  const username = page.locator('username');
-  const submitBtn = page.locator('button[type="submit"]');
-
-  await expect(username).toBeVisible();
-  await username.fill('Ganesh');
-
-  await expect(submitBtn).toBeEnabled();
-  await submitBtn.click();
-
-  await expect(page.locator('.success-msg')).toHaveText('Login successful');
-});
-
-
-💡 Tips:
-
-Assertions automatically wait for timeout (default: 5s).
-Use `expect()` only after page actions to verify results.
-
-Let me know if you want:
-
-✅ List of advanced assertions
-✅ How to add custom assertions
-✅ Tips for flaky test handling with retries
-
-Here's a clear and simple comparison between Soft Assertions and Hard Assertions in Playwright (and testing in general), with examples:
-
-✅ Hard Assertion vs Soft Assertion in Playwright
-
-| Aspect                | Hard Assertion                         | Soft Assertion                                    |
-| - |  | -- |
-| Definition            | Stops the test immediately on failure      | Continues execution even if the assertion fails       |
-| Behavior              | Test fails and exits on first failed check | Test runs all assertions, collects all failures       |
-| Use Case              | Critical checks (e.g., login success)      | Optional or multiple validations in a test            |
-| Support in Playwright | ✅ Fully supported using `expect()`         | ❌ Not natively supported (needs workaround or plugin) |
-
-
-
-🔴 Hard Assertion Example (Default in Playwright)
-import { test, expect } from '@playwright/test';
-
-test('hard assertion example', async ({ page }) => {
-  await page.goto('https://example.com');
-
-  await expect(page.locator('username')).toBeVisible(); // If this fails, test stops here
-  await expect(page.locator('password')).toBeVisible();
-});
-If the first `expect` fails, the second line won’t be executed.
-
-
-
-🟡 Soft Assertion Example (Workaround)
-
-Playwright doesn't support native soft assertions, but you can manually collect errors like this:
-test('soft assertion example', async ({ page }) => {
-  const errors: string[] = [];
-
-  await page.goto('https://example.com');
-
-  try {
-    await expect(page.locator('username')).toBeVisible();
-  } catch (e) {
-    errors.push('Username field not visible');
-  }
-
-  try {
-    await expect(page.locator('password')).toBeVisible();
-  } catch (e) {
-    errors.push('Password field not visible');
-  }
-
-  if (errors.length > 0) {
-    throw new Error(errors.join('\n')); // Fails at end with all errors
-  }
-});
-
-
-✅ Summary
-
-Use hard assertions for essential test flow control.
-Use soft assertion (workaround) when you want to validate multiple things but fail only at the end.
-
-Let me know if you want:
-
-✅ A reusable soft assertion helper function
-✅ Integration with third-party assertion libraries (like `chai-soft-assert`)
-
 Here are simple and clear notes on Actions & Interactions in Playwright — with real examples. These are core for writing UI test cases.
-
-🎯 Playwright Actions & Interactions
-
-These are methods used to interact with web elements, like clicking, typing, hovering, etc.
-
-✅ Common Actions
-
-| Action       | Syntax Example                                 | What it Does                         |
-| - | -- | - |
-| `click()`        | `await page.click('text=Login');`                  | Clicks on a button, link, or element     |
-| `fill()`         | `await page.fill('email', 'ganesh@test.com');`    | Fills input field with text              |
-| `type()`         | `await page.type('email', 'ganesh');`             | Types character-by-character (slower)    |
-| `press()`        | `await page.press('input', 'Enter');`             | Simulates keyboard press like Enter, Tab |
-| `dblclick()`     | `await page.dblclick('item');`                    | Double-clicks the element                |
-| `hover()`        | `await page.hover('.menu');`                       | Moves mouse over element                 |
-| `check()`        | `await page.check('agree');`                      | Checks a checkbox                        |
-| `uncheck()`      | `await page.uncheck('agree');`                    | Unchecks a checkbox                      |
-| `selectOption()` | `await page.selectOption('selectcountry', 'IN');` | Selects dropdown value                   |
-| `dragTo()`       | `await source.dragTo(target);`                     | Drags one element to another             |
-| `screenshot()`   | `await page.screenshot({ path: 'page.png' });`     | Takes a screenshot                       |
-
-
-
-🧪 Full Example
-test('user login test', async ({ page }) => {
-  await page.goto('https://example.com/login');
-
-  await page.fill('username', 'ganesh');
-  await page.fill('password', 'password123');
-  await page.click('button[type="submit"]');
-
-  await expect(page).toHaveURL(/dashboard/);
-});
-
-
-💡 Tips:
-
-All actions auto-wait: No need to manually add delays or waits.
-Always combine actions with assertions to validate outcomes.
-Use `locator().click()` instead of `page.click()` for more stable selectors.
 
 Let me know if you want:
 
