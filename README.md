@@ -4,7 +4,7 @@ https://www.youtube.com/watch?v=N4j4Di1oGGA&list=PLc-TiJDo4UOW-plK9AHkG7MkJuNEPB
 
 ## 🎯 Playwright CLI Commands – One-Line Explanations
 
-| Command                                      | One-Line Explanation                             |
+## | Command                                      | One-Line Explanation                             |
 | -- |  |
 | `npx playwright test`                        | Runs all tests in the project.                   |
 | `npx playwright test tests/login.spec.ts`    | Runs a specific test file.                       |
@@ -20,191 +20,175 @@ https://www.youtube.com/watch?v=N4j4Di1oGGA&list=PLc-TiJDo4UOW-plK9AHkG7MkJuNEPB
 
 Let me know if you want the next topic (e.g., config, locators, test structure, etc.) in the same style.
 
-Here are the **best practices for using Playwright** in a real-world project — explained in **simple points**, with examples where needed:
 
----
+## best practices
 
-## ✅ 1. Use `await` with every Playwright action
+✅ 1. Use `await` with every Playwright action
 
-**Why:** Playwright APIs are async; forgetting `await` can lead to flaky tests.
+Why: Playwright APIs are async; forgetting `await` can lead to flaky tests.
 
-```ts
+
 await page.goto('https://example.com');
 await page.click('#login');
-```
 
----
 
-## ✅ 2. Use built-in **locators** (like `getByRole`, `getByText`, etc.)
+✅ 2. Use built-in locators (like `getByRole`, `getByText`, etc.)
 
-**Why:** More reliable and readable than XPath or complex CSS.
+Why: More reliable and readable than XPath or complex CSS.
 
-```ts
+
 await page.getByRole('button', { name: 'Submit' }).click();
-```
 
----
 
-## ✅ 3. Avoid hard waits (`page.waitForTimeout`)
+✅ 3. Avoid hard waits (`page.waitForTimeout`)
 
-**Why:** Slows tests and causes flakiness. Use smart waits.
+Why: Slows tests and causes flakiness. Use smart waits.
 
 ✅ Prefer:
 
-```ts
+
 await expect(page.locator('#success')).toBeVisible();
-```
+
 
 🚫 Avoid:
 
-```ts
+
 await page.waitForTimeout(3000);
-```
+
 
 ---
 
-## ✅ 4. Use test hooks (`beforeEach`, `afterAll`, etc.)
+✅ 4. Use test hooks (`beforeEach`, `afterAll`, etc.)
 
-**Why:** Helps reduce code repetition (e.g., login or navigation steps).
+Why: Helps reduce code repetition (e.g., login or navigation steps).
 
-```ts
+
 test.beforeEach(async ({ page }) => {
   await page.goto('https://app.com/login');
 });
-```
+
 
 ---
 
-## ✅ 5. Reuse authentication using `storageState`
+✅ 5. Reuse authentication using `storageState`
 
-**Why:** Speeds up tests and avoids login in every test.
+Why: Speeds up tests and avoids login in every test.
 
-```ts
+
 // Save login session
 await context.storageState({ path: 'auth.json' });
 // Reuse it
 test.use({ storageState: 'auth.json' });
-```
 
----
+✅ 6. Use `test.describe()` to group related tests
 
-## ✅ 6. Use `test.describe()` to group related tests
-
-**Why:** Organizes your test files and makes debugging easier.
-
-```ts
+Why: Organizes your test files and makes debugging easier.
 test.describe('Login Tests', () => {
   test('Valid login', async ({ page }) => { ... });
   test('Invalid login', async ({ page }) => { ... });
 });
-```
+
 
 ---
 
-## ✅ 7. Isolate tests using **browser contexts**
+✅ 7. Isolate tests using browser contexts
+Why: Each test runs in a clean session (like incognito).
 
-**Why:** Each test runs in a clean session (like incognito).
 
-```ts
 const context = await browser.newContext();
 const page = await context.newPage();
-```
+
 
 ---
 
-## ✅ 8. Keep test files small and focused
+✅ 8. Keep test files small and focused
 
-**Why:** Easier to debug, review, and maintain.
+Why: Easier to debug, review, and maintain.
 
 > 👍 One test file = one feature (e.g., `login.spec.ts`, `checkout.spec.ts`)
 
 ---
 
-## ✅ 9. Use meaningful test names
+✅ 9. Use meaningful test names
 
-**Why:** Makes reports and failures easier to understand.
+Why: Makes reports and failures easier to understand.
 
-```ts
+
 test('User can add item to cart and see total price updated', async () => { ... });
-```
 
----
+✅ 10. Use assertions smartly
 
-## ✅ 10. Use assertions smartly
-
-**Why:** Avoids false positives.
-
-```ts
+Why: Avoids false positives.
 await expect(page).toHaveURL(/dashboard/);
 await expect(page.locator('h1')).toHaveText('Welcome Ganesh');
-```
+
 
 ---
 
-## ✅ 11. Use environment variables for test data/configs
+✅ 11. Use environment variables for test data/configs
 
-**Why:** Keep sensitive data out of code.
+Why: Keep sensitive data out of code.
 
-```ts
+
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
-```
+
 
 ---
 
-## ✅ 12. Run tests in parallel (using `projects`)
+✅ 12. Run tests in parallel (using `projects`)
 
-**Why:** Speeds up test suite in CI.
+Why: Speeds up test suite in CI.
 
-```ts
+
 projects: [
   { name: 'Chrome', use: { browserName: 'chromium' } },
   { name: 'Firefox', use: { browserName: 'firefox' } },
 ],
-```
+
 
 ---
 
-## ✅ 13. Add CI integration (GitHub Actions, Jenkins)
+✅ 13. Add CI integration (GitHub Actions, Jenkins)
 
-**Why:** Automates test runs on every commit or PR.
+Why: Automates test runs on every commit or PR.
 
 > Example: `.github/workflows/playwright.yml`
 
 ---
 
-## ✅ 14. Use codegen for rapid script generation (but refactor)
+✅ 14. Use codegen for rapid script generation (but refactor)
 
-**Why:** Helps beginners, but clean up later for reliability.
+Why: Helps beginners, but clean up later for reliability.
 
-```bash
+bash
 npx playwright codegen https://example.com
-```
+
 
 ---
 
-## ✅ 15. Use custom helpers or fixtures for reusable logic
+✅ 15. Use custom helpers or fixtures for reusable logic
 
-**Why:** Avoid duplication and keep tests clean.
+Why: Avoid duplication and keep tests clean.
 
-```ts
+
 test.use({ loginPage: async ({ page }, use) => { ... } });
-```
+
 
 ---
 
-## ✅ 16. Use HTML reports for debugging
+✅ 16. Use HTML reports for debugging
 
-```bash
+bash
 npx playwright show-report
-```
+
 
 ---
 
-Would you like this added to your **Playwright Topics Checklist** document?
+Would you like this added to your Playwright Topics Checklist document?
 
   
-📘 Playwright with TypeScript – Common Commands
+## 📘 Playwright with TypeScript – Common Commands
 
 1. Launch Browser
 const browser = await chromium.launch({ headless: false });
@@ -266,7 +250,7 @@ import { chromium } from 'playwright';
   await browser.close();
 })();
 
-📝 Playwright Notes – With TypeScript (Simple & Clear)
+## 📝 Playwright Notes – With TypeScript (Simple & Clear)
 ✅ What is Playwright?
 Playwright is an open-source end-to-end testing framework for web apps.
 Developed by Microsoft.
@@ -300,7 +284,7 @@ test('homepage has title', async ({ page }) => {
 Let’s add a clear explanation for `async`, `await`, and how they work in Playwright (and JavaScript in general), along with simple code execution flow.
 
 
-🛠 Playwright – Local Setup & Environment Notes
+## 🛠 Playwright – Local Setup & Environment Notes
 
 ✅ 1. Prerequisites
 
@@ -386,8 +370,8 @@ Here are simple and clear notes on XPath in Playwright, with examples—perfect 
 Here’s a simple and clean "First Test Case Example" in Playwright with TypeScript — great for beginners:
 
 
-### 📘 Why is this important in Playwright?
-Playwright is **asynchronous**, because most operations (like page actions) return Promises.
+## 📘 Why is this important in Playwright?
+Playwright is asynchronous, because most operations (like page actions) return Promises.
 
 ✅ Example:
 test('Login Test', async ({ page }) => {
@@ -399,7 +383,7 @@ test('Login Test', async ({ page }) => {
 });
 
 
-🎯 Playwright Actions & Interactions
+## 🎯 Playwright Actions & Interactions
 
 These are methods used to interact with web elements, like clicking, typing, hovering, etc.
 
@@ -441,7 +425,7 @@ Use `locator().click()` instead of `page.click()` for more stable selectors.
 
 
 
-✅ Playwright Assertions – Quick Notes
+## ✅ Playwright Assertions – Quick Notes
 
 📌 What is an Assertion?
 
@@ -452,7 +436,7 @@ Playwright uses `expect()` from its test library for making assertions.
   
 🧪 Importing Assertion
 import { test, expect } from '@playwright/test';
-🧰 Common Assertions in Playwright
+ ### Common Assertions in Playwright
 
 | Assertion       | Usage Example                                    | Checks                        |
 | - | - |  |
@@ -500,7 +484,7 @@ Let me know if you want:
 
 Here's a clear and simple comparison between Soft Assertions and Hard Assertions in Playwright (and testing in general), with examples:
 
-✅ Hard Assertion vs Soft Assertion in Playwright
+### ✅ Hard Assertion vs Soft Assertion in Playwright
 
 | Aspect                | Hard Assertion                         | Soft Assertion                                    |
 | - |  | -- |
@@ -562,11 +546,11 @@ Let me know if you want:
 
 
 
-### 🔄 Understanding `async`, `await`, and Function Execution
+## 🔄 Understanding `async`, `await`, and Function Execution
 
 ✅ What is `async`?
 
-Marks a function to always return a **Promise**.
+Marks a function to always return a Promise.
 Inside an `async` function, you can use `await`.
 
 async function myFunction() {
@@ -579,7 +563,7 @@ myFunction().then(console.log); // Output: Hello
 
 ✅ What is `await`?
 
-`await` is used **inside an async function*to pause execution until a Promise resolves.
+`await` is used inside an async function*to pause execution until a Promise resolves.
 
 
 async function showData() {
@@ -603,14 +587,14 @@ test();
 console.log('End');
 
 
-**Output:**
+Output:
 Start
 Inside async function
 End
 After await
 👉 Explanation:
 
-`await` pauses only **inside*the async function.
+`await` pauses only inside*the async function.
 Main thread continues to next line (`End`).
 After 1 second, it resumes and prints `After await`.
 
@@ -621,7 +605,7 @@ Field fills before button click
 Navigation happens before assertion
 
 Without `await`, test becomes unreliable.
-Would you like me to add this to your **Playwright Topics Checklist*document now?
+Would you like me to add this to your Playwright Topics Checklist*document now?
 
 🧪 Playwright Test Features
 
@@ -647,7 +631,7 @@ const config: PlaywrightTestConfig = {
 };
 export default config;
 
-📁 CLI Commands (One-Line)
+### 📁 CLI Commands (One-Line)
 
 | Command                        | Explanation                           |
 |  | - |
@@ -666,7 +650,7 @@ export default config;
 ✅ Custom reporters
 ✅ Page object model support
 
-🚀 Core Concepts in Playwright
+## 🚀 Core Concepts in Playwright
 
 |   | Concept              | Explanation                                                                  | Example                                    |
 | -- |  | -- | - |
@@ -713,7 +697,7 @@ Let me know if you'd like:
 
 Add // @ts-check at the start of each test file when using JavaScript in VS Code to get automatic type checking.
 
-✅ Your First Playwright Test (TypeScript)
+## ✅ Your First Playwright Test (TypeScript)
 
 📁 Folder Structure (after `npx playwright install`)
 my-playwright-project/
@@ -737,7 +721,7 @@ test('homepage should have title and login button', async ({ page }) => {
   await expect(page).toHaveURL(/iana\.org/);
 });
 
-▶️ How to Run the Test
+## ▶️ How to Run the Test
 npx playwright test
 ✅ Output
 
@@ -757,7 +741,7 @@ Let me know if you want:
 📊 How to generate HTML test reports
 
   
-🔁 What are Hooks in Playwright?
+## 🔁 What are Hooks in Playwright?
 Hooks are special functions that run before or after your tests or test steps.
 They help you set up or clean up things like data, browser state, or logins.
 
@@ -804,7 +788,7 @@ Let me know if you want:
 🧪 Global hooks in `playwright.config.ts`
 
   
-🧩 Test Grouping in Playwright
+## 🧩 Test Grouping in Playwright
 Grouping helps you organize tests and run specific sets (e.g., smoke, login, dashboard). You can group tests by:
 `describe` blocks
 tags
@@ -886,7 +870,7 @@ Let me know if you want:
 🚀 Example of CI-based test group execution (e.g., smoke only on deploy)
 
 
-✅ What is XPath?
+## ✅ What is XPath?
 XPath is a language used to locate elements in an XML/HTML document.
 Useful when CSS selectors are not enough or for complex DOM trees.
 
@@ -908,8 +892,6 @@ await page.$('//button[text()="Login"]')
 | `//a[contains(text(),"Click")]` | Anchor tag with text containing "Click"       |
 | `//div[@class="header"]/h1`     | Selects `<h1>` inside div with class `header` |
 
-
-
 ✅ Example in Playwright
 await page.locator('//input[@name="username"]').fill('Ganesh');
 await page.locator('//button[text()="Login"]').click();
@@ -930,13 +912,13 @@ Open browser → Right-click → Inspect → Right-click element → Copy → Co
 
 Let me know if you want notes on:
 
-✅ CSS vs XPath
+### ✅ CSS vs XPath
 ✅ Best practices for selectors
 ✅ Advanced XPath functions (like `starts-with`, `contains`, etc.)
 
 Sure! Here's a clear and simple table format of the most common XPath commands and patterns — ideal for Playwright and other automation tools:
 
-📘 Common XPath Commands & Patterns – Table Format
+### 📘 Common XPath Commands & Patterns – Table Format
 
 | XPath Pattern                        | Description                               | Example Match                         |
 | - |  | -- |
@@ -960,7 +942,7 @@ Let me know if you want another table for:
 ✅ CSS vs XPath comparison
 ✅ Playwright-specific locator best practices
 
-🧠 Playwright Codegen – Notes
+## 🧠 Playwright Codegen – Notes
 
 ✅ What is Codegen?
 
@@ -1020,7 +1002,7 @@ Here are simple and clean notes on Playwright Locators — including types, exam
 
 
 
-🎯 Playwright Locators – Notes
+## 🎯 Playwright Locators – Notes
 
 ✅ What is a Locator?
 
@@ -1045,7 +1027,7 @@ page.locator('selector')
 
 
 
-✅ Actions with Locators
+## ✅ Actions with Locators
 await page.locator('text=Login').click();
 await page.locator('email').fill('ganesh@test.com');
 await page.locator('.submit-btn').press('Enter');
@@ -1078,7 +1060,7 @@ Let me know if you want:
 
 Here’s a quick and clear comparison of CSS Selector vs XPath — ideal for Playwright, Selenium, or interview prep:
 
-🧪 CSS Selector vs XPath – Quick Comparison Table
+## 🧪 CSS Selector vs XPath – Quick Comparison Table
 
 | Feature                      | CSS Selector                     | XPath                                 |
 | - |  | -- |
@@ -1111,7 +1093,7 @@ Let me know if you’d like:
 ✅ Advanced patterns like `:has()` and `:nth-child()` in CSS or `contains()` in XPath
 
 
-🎯 Playwright Built-in Locators
+## 🎯 Playwright Built-in Locators
 
 Playwright provides built-in locators for reliable and readable test automation. These locators use accessible roles, labels, placeholders, test IDs, and more.
 
@@ -1137,7 +1119,7 @@ await page.getByLabel('Email').fill('test@example.com');
 await page.getByPlaceholder('Enter password').fill('123456');
 await page.getByTestId('submit-btn').click();
 
-🧠 Why Use Built-in Locators?
+### 🧠 Why Use Built-in Locators?
 
 More readable than CSS/XPath
 Stable and resilient to UI changes
@@ -1165,7 +1147,7 @@ Let me know if you want:
 
 
 
-🚀 Playwright CI Setup (GitHub Actions)
+## 🚀 Playwright CI Setup (GitHub Actions)
 
 CI helps you automatically run Playwright tests when you push code — ensuring your app is always tested.
 
@@ -1260,7 +1242,7 @@ Let me know if you'd like:
 📤 Send test reports to Slack or email
 
 
-🏷️ 1. Annotations in Playwright
+## 🏷️ 1. Annotations in Playwright
 
 Annotations are used to mark tests with special behavior (like skip, only, slow, tag, etc.).
 
@@ -1347,7 +1329,7 @@ Let me know if you’d like:
 🔁 Parallel test users (2 users in one test using 2 contexts)
 
 
-✅ Common Test Case Examples in Playwright (TypeScript)
+## ✅ Common Test Case Examples in Playwright (TypeScript)
 
 🧾 1. Input Box (Text Field)
 test('should fill input box', async ({ page }) => {
@@ -1522,9 +1504,7 @@ Let me know if you'd like:
 
 Great! Let’s now continue with important Playwright topics you haven’t fully covered yet, along with simple explanations and examples:
 
-
-
-🔍 Topics You Can Still Explore
+## 🔍 Topics You Can Still Explore
 
 | 📘 Topic | 🔎 Description & Example |
 | -- |  |
@@ -1691,7 +1671,7 @@ Running in headless cloud services
 
 
 
-✅ Final Summary Table
+## ✅ Final Summary Table
 
 | Category             | Covered | Need to Explore  |
 | -- | - | - |
@@ -1715,7 +1695,7 @@ Running in headless cloud services
 
 Let me know which of these you'd like examples or notes on next (I'll keep it simple as always).
 
-Retries
+## Retries
 Test retries are a way to automatically re-run a test when it fails
 When all tests pass, they will run in order in the same worker process.
 Should any test fail, Playwright Test will discard the entire worker process along with the browser and will start a new one. Testing will continue in the new worker process starting with the next test.
@@ -1723,7 +1703,7 @@ If you enable retries, second worker process will start by retrying the failed t
 
 Playwright supports test retries. When enabled, failing tests will be retried multiple times until they pass, or until the maximum number of retries is reached. By default failing tests are not retried.
 
-# Give failing tests 3 retry attempts
+Give failing tests 3 retry attempts
 npx playwright test --retries=3
 
 You can configure retries in the configuration file:
@@ -1741,6 +1721,6 @@ Playwright Test will categorize tests as follows:
 
 
   
-# Timeouts
+## Timeouts
 
 
