@@ -1,7 +1,8 @@
-## ✅ Covered Topics (Based on Our Past Discussion)
+## ✅ Covered Topics
 
 ##  Category                 | Topic                                                          |
-|  | -- |
+
+  | -- |
 | 🔧 Setup                 | Local setup & environment                                      |
 | 📦 CLI & Commands        | `npx playwright test`, `show-report`, `debug`, `codegen`, etc. |
 | 🧠 Core Concepts         | Browser, Context, Page, Locator                                |
@@ -52,7 +53,6 @@
 
 
 ## ✅ Suggested Folder Structure for Practice
-
 
 tests/
 │
