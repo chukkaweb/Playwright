@@ -1,6 +1,6 @@
 ## ✅ Covered Topics (Based on Our Past Discussion)
 
-| Category                 | Topic                                                          |
+##  Category                 | Topic                                                          |
 |  | -- |
 | 🔧 Setup                 | Local setup & environment                                      |
 | 📦 CLI & Commands        | `npx playwright test`, `show-report`, `debug`, `codegen`, etc. |
@@ -24,7 +24,7 @@
 
 ## ❌ Still to Cover (Must-Learn Topics)
 
-| Category         | Topic                                                | Why It’s Important                                     |
+## Category         | Topic                                                | Why It’s Important                                     |
 | - | - |  |
 | ✅ \[Recommended] | Code Reusability via Page Object Model (POM) | Modular, scalable structure                            |
 | ✅ \[Recommended] | Custom Helpers/Utils                             | Centralized common logic (e.g., login steps)           |
@@ -41,7 +41,7 @@
 
 ## 🧱 Code Reusability Techniques in Playwright (TypeScript)
 
-| Reusability Method          | Description                                       | Example                                   |
+## Reusability Method          | Description                                       | Example                                   |
 |  | - | -- |
 | Page Object Model (POM) | Create classes for pages/components               | `loginPage.login(username, pass)`         |
 | Custom commands/utils   | Common actions like `login()`, `fillForm()`       | Stored in `utils.ts`                      |
