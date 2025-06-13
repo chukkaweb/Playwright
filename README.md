@@ -3,7 +3,7 @@
 ##  Category                 | Topic                                                          |
 
   | -- |
-| 🔧 Setup                 | Local setup & environment                                      |
+* [ ] 🔧 Setup                 | Local setup & environment                                      |
 | 📦 CLI & Commands        | `npx playwright test`, `show-report`, `debug`, `codegen`, etc. |
 | 🧠 Core Concepts         | Browser, Context, Page, Locator                                |
 | 📄 Your First Test       | Sample test with TypeScript                                    |
@@ -26,8 +26,8 @@
 ## ❌ Still to Cover (Must-Learn Topics)
 
 ## Category         | Topic                                                | Why It’s Important                                     |
-| - | - |  |
-| ✅ \[Recommended] | Code Reusability via Page Object Model (POM) | Modular, scalable structure                            |
+* [ ]  - | - |  |
+* [ ]  ✅ \[Recommended] | Code Reusability via Page Object Model (POM) | Modular, scalable structure                            |
 | ✅ \[Recommended] | Custom Helpers/Utils                             | Centralized common logic (e.g., login steps)           |
 | ✅ \[Recommended] | Fixtures                                         | Share setup/teardown logic across tests                |
 | ✅ \[Recommended] | Environment Configs                              | For running against dev/staging/prod                   |
