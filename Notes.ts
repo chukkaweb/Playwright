@@ -52,6 +52,25 @@ my-project/
 ├── package.json
 ├── node_modules/
 
+Real time 
+my-project/
+├── e2e/src/                 Test files (e.g., .spec.ts)
+except test folder files all can write ts beacuse we are reusing 
+common/ 
+constants
+env/.env.development .env.itegration  
+pages
+routes
+steps
+
+test
+utils
+
+├── playwright.config.ts    Configuration file
+├── package.json
+├── node_modules/
+
+
 ✅ 4. Installing Manually (Optional Setup)
 npm init -y                        Create package.json
 npm i -D @playwright/test          Install Playwright test package
@@ -264,6 +283,81 @@ Let me know if you want:
 💾 Example with storage (like saving login state)
 📊 How to generate HTML test reports
 
+You have a page file: `home.component.ts`
+You want to test it from: `home.spec.ts`
+
+ ✅ Step-by-Step Example
+
+ 1️⃣ `home.component.ts` – (Reusable Logic)
+// home.component.ts
+export class HomeComponent {
+  getWelcomeMessage(): string {
+    return 'Welcome to Playwright!';
+  }
+  addNumbers(a: number, b: number): number {
+    return a + b;
+  }
+}
+
+ 2️⃣ `home.spec.ts` – (Test File)
+// home.spec.ts
+
+import { test, expect } from '@playwright/test';
+import { HomeComponent } from './home.component';  // ✅ import the class
+
+test('should return welcome message', async () => {
+  const home = new HomeComponent();
+  const message = home.getWelcomeMessage();
+  expect(message).toBe('Welcome to Playwright!');
+});
+
+test('should add two numbers', async () => {
+  const home = new HomeComponent();
+  const result = home.addNumbers(5, 7);
+  expect(result).toBe(12);
+});
+
+
+---
+
+ 💡 How This Works
+
+* You write logic in a `.ts` file (`home.component.ts`).
+* You **export** the class or functions using `export`.
+* In your `.spec.ts`, you **import** that file using `import { ClassName } from './filename'`.
+* Then you **create an instance** and **call the methods** in your tests.
+
+---
+
+ ✅ Real Playwright Use Case
+
+In actual Playwright automation, this is commonly used for **Page Object Model (POM)**:
+home.page.ts`
+import { Page } from '@playwright/test';
+
+export class HomePage {
+  constructor(private page: Page) {}
+
+  async visit() {
+    await this.page.goto('https://example.com/home');
+  }
+
+  async getHeaderText(): Promise<string> {
+    return await this.page.textContent('h1');
+  }
+}
+
+home.spec.ts`
+import { test, expect } from '@playwright/test';
+import { HomePage } from './home.page';
+
+test('verify header text on home page', async ({ page }) => {
+  const home = new HomePage(page);
+  await home.visit();
+  const header = await home.getHeaderText();
+
+  expect(header).toBe('Home Page');
+});
 
 ========= 📁 CLI Commands (One-Line) =========
 | Command                        | Explanation                           |
