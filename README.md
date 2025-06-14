@@ -1,7 +1,5 @@
-## ✅ Covered Topics
 
 ##  Category                 | Topic                                                          |
-
   | -- |
 * [ ] 🔧 Setup                 | Local setup & environment                                      |
 * [ ]  📦 CLI & Commands        | `npx playwright test`, `show-report`, `debug`, `codegen`, etc. |
@@ -21,10 +19,6 @@
 * [ ]  📋 Annotations           | Skipping, tagging tests                                        |
 * [ ]  🧑‍💻 Best Practices     | Naming, structure, stability                                   |
 
-
-
-## ❌ Still to Cover (Must-Learn Topics)
-
 ## Category         | Topic                                                | Why It’s Important                                     |
 * [ ]  - | - |  |
 * [ ]  ✅ \[Recommended] | Code Reusability via Page Object Model (POM) | Modular, scalable structure                            |
@@ -38,9 +32,6 @@
 * [ ]  ✅ \[Optional]    | Test tagging & filtering                         | Run only certain tests by tag                          |
 * [ ]  ✅ \[Optional]    | Parallel Projects Setup                          | Run multiple browser/device tests together             |
 
-
-
-## 🧱 Code Reusability Techniques in Playwright (TypeScript)
 
 ## Reusability Method          | Description                                       | Example                                   |
 * [ ]   | - | -- |
