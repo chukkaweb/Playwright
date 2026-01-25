@@ -78,3 +78,52 @@ playwright.config.ts
 * [ ] Explored device/browser variations
 * [ ] Tagged and grouped test scenarios
 
+This guide highlights 7 Playwright features that many testers miss 👇
+https://www.linkedin.com/posts/manojbind23_7-playwright-features-most-testers-dont-activity-7419340606663184386-QQbV
+
+1️⃣ Trace Viewer
+
+When tests fail in CI, debugging becomes painful.
+Trace Viewer records screenshots, logs, network calls, and DOM state.
+It helps you replay the failure and understand issues faster.
+
+2️⃣ Auto-Waiting
+
+No need for Thread.sleep() or hard waits.
+Playwright automatically waits for elements to be ready.
+This reduces flaky tests a lot.
+
+3️⃣ Test Generator (Codegen)
+
+Playwright can record actions and generate test code.
+Very useful for learning locators and creating test skeletons quickly.
+
+4️⃣ Network Interception
+
+You can mock API responses easily.
+This helps test error scenarios and edge cases without depending on backend.
+
+5️⃣ Browser Contexts
+
+Each test runs in a clean and isolated environment.
+No shared cookies. No shared sessions.
+Perfect for parallel execution.
+
+6️⃣ Built-in API Testing
+
+UI + API testing in one framework.
+Same assertions. Same reports.
+Less maintenance.
+
+7️⃣ Multi-Browser Testing
+
+Run the same tests on Chromium, Firefox, and WebKit (Safari).
+Helps catch browser-specific issues early.
+
+Key Learning
+Most testers use only 20% of Playwright features.
+
+These advanced features give the other 80% value.
+
+
+
